@@ -18,7 +18,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Publish Application
-        run: dotnet publish WorldClockStatusWindow/WorldClockStatusWindow.csproj -c Release -o publish -r win-x64 --self-contained true
+        run: dotnet publish WorldClockStatusWindow.csproj -c Release -o publish -r win-x64 --self-contained true
 
       - name: Create Velopack Release
         run: |
