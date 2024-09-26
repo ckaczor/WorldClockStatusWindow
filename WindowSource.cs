@@ -5,8 +5,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Threading;
+using Serilog;
+using Serilog.Core;
+using Velopack;
+using Velopack.Sources;
+using WorldClockStatusWindow.Properties;
 
 namespace WorldClockStatusWindow;
 
@@ -25,9 +31,47 @@ internal class WindowSource : IWindowSource, IDisposable
 
         _dispatcher = Dispatcher.CurrentDispatcher;
 
+        _timer = new Timer(1000);
+
+        Task.Factory.StartNew(UpdateApp).ContinueWith(_ => Start());
+    }
+
+    private async Task<bool> UpdateApp()
+    {
+        try
+        {
+            var updateManager = new UpdateManager(new GithubSource("https://github.com/ckaczor/WorldClockStatusWindow", null, false));
+
+            if (!updateManager.IsInstalled)
+                return false;
+
+            _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Checking for update..."));
+
+            var newVersion = await updateManager.CheckForUpdatesAsync();
+
+            if (newVersion == null)
+                return false;
+
+            _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Downloading update..."));
+
+            await updateManager.DownloadUpdatesAsync(newVersion);
+
+            _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Installing update..."));
+
+            updateManager.ApplyUpdatesAndRestart(newVersion);
+        }
+        catch (Exception e)
+        {
+            Log.Logger.Error(e, nameof(UpdateApp));
+        }
+
+        return true;
+    }
+
+    private void Start()
+    {
         Load();
 
-        _timer = new Timer(1000);
         _timer.Elapsed += HandleTimerElapsed;
         _timer.Enabled = true;
     }
@@ -70,6 +114,10 @@ internal class WindowSource : IWindowSource, IDisposable
 
             text.Append($"{timeZoneEntry.Label.PadLeft(labelLength)}: {TimeZoneInfo.ConvertTime(now, timeZone).ToString(Properties.Settings.Default.TimeFormat)}");
         }
+
+        text.AppendLine();
+        text.AppendLine();
+        text.Append($"Version: {Assembly.GetEntryAssembly()!.GetName().Version!.ToString()}");
 
         _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText(text.ToString()));
     }
