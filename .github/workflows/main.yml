@@ -25,4 +25,4 @@ jobs:
           dotnet tool install -g vpk
           vpk download github --repoUrl https://github.com/ckaczor/WorldClockStatusWindow
           vpk pack -u MyUniqueIdentifier -v ${{ steps.get-version.outputs.version }} -p publish
-          vpk upload github --repoUrl https://github.com/ckaczor/WorldClockStatusWindow --publish --releaseName "WorldClockStatusWindow ${{ steps.get-version.outputs.version }}" --tag v${{ steps.get-version.outputs.version }}
+          vpk upload github --repoUrl https://github.com/ckaczor/WorldClockStatusWindow --publish --releaseName "WorldClockStatusWindow 1.0.${{ github.event.release.tag_name }}" --tag v1.0.${{ github.event.release.tag_name }}

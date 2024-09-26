@@ -45,18 +45,18 @@ internal class WindowSource : IWindowSource, IDisposable
             if (!updateManager.IsInstalled)
                 return false;
 
-            _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Checking for update..."));
+            _dispatcher.Invoke(() => _floatingStatusWindow.SetText("Checking for update..."));
 
             var newVersion = await updateManager.CheckForUpdatesAsync();
 
             if (newVersion == null)
                 return false;
 
-            _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Downloading update..."));
+            _dispatcher.Invoke(() => _floatingStatusWindow.SetText("Downloading update..."));
 
             await updateManager.DownloadUpdatesAsync(newVersion);
 
-            _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Installing update..."));
+            _dispatcher.Invoke(() => _floatingStatusWindow.SetText("Installing update..."));
 
             updateManager.ApplyUpdatesAndRestart(newVersion);
         }
@@ -119,7 +119,7 @@ internal class WindowSource : IWindowSource, IDisposable
         text.AppendLine();
         text.Append($"Version: {Assembly.GetEntryAssembly()!.GetName().Version!.ToString()}");
 
-        _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText(text.ToString()));
+        _dispatcher.Invoke(() => _floatingStatusWindow.SetText(text.ToString()));
     }
 
     public void Dispose()
