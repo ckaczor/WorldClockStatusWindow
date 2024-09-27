@@ -22,6 +22,8 @@ internal class WindowSource : IWindowSource, IDisposable
     private readonly Timer _timer;
     private readonly Dispatcher _dispatcher;
 
+    private readonly UpdateManager _updateManager;
+
     private List<TimeZoneEntry> _timeZoneEntries;
 
     internal WindowSource()
@@ -30,6 +32,8 @@ internal class WindowSource : IWindowSource, IDisposable
         _floatingStatusWindow.SetText("Loading...");
 
         _dispatcher = Dispatcher.CurrentDispatcher;
+
+        _updateManager = new UpdateManager(new GithubSource("https://github.com/ckaczor/WorldClockStatusWindow", null, false));
 
         _timer = new Timer(1000);
 
@@ -40,25 +44,23 @@ internal class WindowSource : IWindowSource, IDisposable
     {
         try
         {
-            var updateManager = new UpdateManager(new GithubSource("https://github.com/ckaczor/WorldClockStatusWindow", null, false));
-
-            if (!updateManager.IsInstalled)
+            if (!_updateManager.IsInstalled)
                 return false;
 
-            _dispatcher.Invoke(() => _floatingStatusWindow.SetText("Checking for update..."));
+            await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Checking for update..."));
 
-            var newVersion = await updateManager.CheckForUpdatesAsync();
+            var newVersion = await _updateManager.CheckForUpdatesAsync();
 
             if (newVersion == null)
                 return false;
 
-            _dispatcher.Invoke(() => _floatingStatusWindow.SetText("Downloading update..."));
+            await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Downloading update..."));
 
-            await updateManager.DownloadUpdatesAsync(newVersion);
+            await _updateManager.DownloadUpdatesAsync(newVersion);
 
-            _dispatcher.Invoke(() => _floatingStatusWindow.SetText("Installing update..."));
+            await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Installing update..."));
 
-            updateManager.ApplyUpdatesAndRestart(newVersion);
+            _updateManager.ApplyUpdatesAndRestart(newVersion);
         }
         catch (Exception e)
         {
@@ -114,6 +116,10 @@ internal class WindowSource : IWindowSource, IDisposable
 
             text.Append($"{timeZoneEntry.Label.PadLeft(labelLength)}: {TimeZoneInfo.ConvertTime(now, timeZone).ToString(Properties.Settings.Default.TimeFormat)}");
         }
+
+        text.AppendLine();
+        text.AppendLine();
+        text.Append(_updateManager.CurrentVersion);
 
         _dispatcher.Invoke(() => _floatingStatusWindow.SetText(text.ToString()));
     }
