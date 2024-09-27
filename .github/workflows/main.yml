@@ -12,12 +12,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Get Version
-        id: get-version
-        shell: bash
-        run: |
-            echo "version=$((${{ github.run_number }}+${{ github.run_attempt }}))" >> $GITHUB_ENV
-            echo $version
+      - name: Get next version
+        uses: reecetech/version-increment@2024.4.3
+        id: version
+        with:
+          scheme: calver
 
       - name: Install .NET
         uses: actions/setup-dotnet@v4
@@ -32,4 +31,4 @@ jobs:
           dotnet tool install -g vpk
           vpk download github --repoUrl https://github.com/ckaczor/WorldClockStatusWindow
           vpk pack -u MyUniqueIdentifier -v ${{ steps.get-version.outputs.version }} -p publish
-          vpk upload github --repoUrl https://github.com/ckaczor/WorldClockStatusWindow --publish --releaseName "WorldClockStatusWindow ${{ steps.get-version.outputs.version }}" --tag v${{ steps.get-version.outputs.version }}
+          vpk upload github --repoUrl https://github.com/ckaczor/WorldClockStatusWindow --publish --releaseName "WorldClockStatusWindow ${{ steps.version.outputs.version }}" --tag v${{ steps.version.outputs.version }}
