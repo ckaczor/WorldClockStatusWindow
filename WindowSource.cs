@@ -1,4 +1,5 @@
 ﻿using ChrisKaczor.Wpf.Windows.FloatingStatusWindow;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Threading;
-using Serilog;
-using Serilog.Core;
 using Velopack;
 using Velopack.Sources;
-using WorldClockStatusWindow.Properties;
 
 namespace WorldClockStatusWindow;
 
@@ -37,7 +35,7 @@ internal class WindowSource : IWindowSource, IDisposable
 
         _timer = new Timer(1000);
 
-        Task.Factory.StartNew(UpdateApp).ContinueWith(_ => Start());
+        Task.Factory.StartNew(UpdateApp).ContinueWith(task => Start(task.Result.Result));
     }
 
     private async Task<bool> UpdateApp()
@@ -47,6 +45,8 @@ internal class WindowSource : IWindowSource, IDisposable
             if (!_updateManager.IsInstalled)
                 return false;
 
+            Log.Logger.Information("Checking for update");
+
             await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Checking for update..."));
 
             var newVersion = await _updateManager.CheckForUpdatesAsync();
@@ -54,9 +54,13 @@ internal class WindowSource : IWindowSource, IDisposable
             if (newVersion == null)
                 return false;
 
+            Log.Logger.Information("Downloading update");
+
             await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Downloading update..."));
 
             await _updateManager.DownloadUpdatesAsync(newVersion);
+
+            Log.Logger.Information("Installing update");
 
             await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Installing update..."));
 
@@ -70,9 +74,18 @@ internal class WindowSource : IWindowSource, IDisposable
         return true;
     }
 
-    private void Start()
+    private void Start(bool hasUpdate)
     {
+        Log.Logger.Information($"Start: hasUpdate={hasUpdate}");
+
+        if (hasUpdate)
+            return;
+
+        Log.Logger.Information("Load");
+
         Load();
+
+        Log.Logger.Information("Starting timer");
 
         _timer.Elapsed += HandleTimerElapsed;
         _timer.Enabled = true;
