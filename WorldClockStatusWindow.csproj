@@ -6,13 +6,13 @@
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <StartupObject>WorldClockStatusWindow.Program</StartupObject>
-    <ApplicationIcon>clock.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Application.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="clock.ico" />
+    <Content Include="Resources\Application.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.5" />
