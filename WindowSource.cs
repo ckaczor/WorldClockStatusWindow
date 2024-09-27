@@ -115,10 +115,6 @@ internal class WindowSource : IWindowSource, IDisposable
             text.Append($"{timeZoneEntry.Label.PadLeft(labelLength)}: {TimeZoneInfo.ConvertTime(now, timeZone).ToString(Properties.Settings.Default.TimeFormat)}");
         }
 
-        text.AppendLine();
-        text.AppendLine();
-        text.Append($"Version: {Assembly.GetEntryAssembly()!.GetName().Version!.ToString()}");
-
         _dispatcher.Invoke(() => _floatingStatusWindow.SetText(text.ToString()));
     }
 
