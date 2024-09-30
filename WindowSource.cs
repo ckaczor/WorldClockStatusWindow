@@ -9,8 +9,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Threading;
-using Velopack;
-using Velopack.Sources;
+using ChrisKaczor.Wpf.Windows;
+using WorldClockStatusWindow.SettingsWindow;
 
 namespace WorldClockStatusWindow;
 
@@ -19,8 +19,6 @@ internal class WindowSource : IWindowSource, IDisposable
     private readonly FloatingStatusWindow _floatingStatusWindow;
     private readonly Timer _timer;
     private readonly Dispatcher _dispatcher;
-
-    private readonly UpdateManager _updateManager;
 
     private List<TimeZoneEntry> _timeZoneEntries;
 
@@ -31,8 +29,6 @@ internal class WindowSource : IWindowSource, IDisposable
 
         _dispatcher = Dispatcher.CurrentDispatcher;
 
-        _updateManager = new UpdateManager(new GithubSource("https://github.com/ckaczor/WorldClockStatusWindow", null, false));
-
         _timer = new Timer(1000);
 
         Task.Factory.StartNew(UpdateApp).ContinueWith(task => Start(task.Result.Result));
@@ -42,14 +38,14 @@ internal class WindowSource : IWindowSource, IDisposable
     {
         try
         {
-            if (!_updateManager.IsInstalled)
+            if (!Program.UpdateManager.IsInstalled)
                 return false;
 
             Log.Logger.Information("Checking for update");
 
             await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Checking for update..."));
 
-            var newVersion = await _updateManager.CheckForUpdatesAsync();
+            var newVersion = await Program.UpdateManager.CheckForUpdatesAsync();
 
             if (newVersion == null)
                 return false;
@@ -58,13 +54,13 @@ internal class WindowSource : IWindowSource, IDisposable
 
             await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Downloading update..."));
 
-            await _updateManager.DownloadUpdatesAsync(newVersion);
+            await Program.UpdateManager.DownloadUpdatesAsync(newVersion);
 
             Log.Logger.Information("Installing update");
 
             await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Installing update..."));
 
-            _updateManager.ApplyUpdatesAndRestart(newVersion);
+            Program.UpdateManager.ApplyUpdatesAndRestart(newVersion);
         }
         catch (Exception e)
         {
@@ -130,10 +126,6 @@ internal class WindowSource : IWindowSource, IDisposable
             text.Append($"{timeZoneEntry.Label.PadLeft(labelLength)}: {TimeZoneInfo.ConvertTime(now, timeZone).ToString(Properties.Settings.Default.TimeFormat)}");
         }
 
-        text.AppendLine();
-        text.AppendLine();
-        text.Append(_updateManager.CurrentVersion);
-
         _dispatcher.Invoke(() => _floatingStatusWindow.SetText(text.ToString()));
     }
 
@@ -163,6 +155,18 @@ internal class WindowSource : IWindowSource, IDisposable
 
     public void ShowSettings()
     {
+        var categoryPanels = new List<CategoryPanelBase>
+        {
+            new GeneralSettingsPanel(),
+            new AboutSettingsPanel()
+        };
+
+        var settingsWindow = new CategoryWindow(categoryPanels, Properties.Resources.SettingsTitle, Properties.Resources.CloseButtonText);
+
+        var dialogResult = settingsWindow.ShowDialog();
+
+        if (!dialogResult.GetValueOrDefault(false))
+            return;
 
         Save();
     }

@@ -121,4 +121,28 @@
   <data name="ApplicationIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Application.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ApplicationName" xml:space="preserve">
+    <value>World Clock Status Window</value>
+  </data>
+  <data name="optionCategoryAbout" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="CheckUpdate" xml:space="preserve">
+    <value>_Check for Update</value>
+  </data>
+  <data name="startWithWindowsCheckBox" xml:space="preserve">
+    <value>_Start when Windows starts</value>
+  </data>
+  <data name="optionCategoryGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="CloseButtonText" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
 </root>

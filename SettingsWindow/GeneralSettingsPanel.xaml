@@ -1,0 +1,16 @@
+﻿<windows:CategoryPanelBase x:Class="WorldClockStatusWindow.SettingsWindow.GeneralSettingsPanel"
+                                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                                  xmlns:properties="clr-namespace:WorldClockStatusWindow.Properties"
+                                  xmlns:windows="clr-namespace:ChrisKaczor.Wpf.Windows;assembly=ChrisKaczor.Wpf.Windows.CategoryWindow"
+                                  mc:Ignorable="d"
+                                  d:DesignHeight="300"
+                                  d:DesignWidth="300">
+    <StackPanel windows:Spacing.Vertical="10">
+        <CheckBox Content="{x:Static properties:Resources.startWithWindowsCheckBox}"
+                  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=AutoStart}"
+                  Click="OnSaveSettings" />
+    </StackPanel>
+</windows:CategoryPanelBase>
