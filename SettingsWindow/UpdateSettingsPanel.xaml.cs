@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 using WorldClockStatusWindow.Properties;
 
 namespace WorldClockStatusWindow.SettingsWindow;
@@ -14,7 +15,13 @@ public partial class UpdateSettingsPanel
 
     private void HandleCheckVersionNowButtonClick(object sender, RoutedEventArgs e)
     {
+        var cursor = Cursor;
+
+        Cursor = Cursors.Wait;
+
         UpdateCheck.DisplayUpdateInformation(true);
+
+        Cursor = cursor;
     }
 
     private void OnSaveSettings(object sender, RoutedEventArgs e)
