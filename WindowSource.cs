@@ -1,4 +1,5 @@
-﻿using ChrisKaczor.Wpf.Windows.FloatingStatusWindow;
+﻿using ChrisKaczor.Wpf.Windows;
+using ChrisKaczor.Wpf.Windows.FloatingStatusWindow;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Threading;
-using ChrisKaczor.Wpf.Windows;
 using WorldClockStatusWindow.SettingsWindow;
 
 namespace WorldClockStatusWindow;
@@ -38,14 +38,17 @@ internal class WindowSource : IWindowSource, IDisposable
     {
         try
         {
-            if (!Program.UpdateManager.IsInstalled)
+            if (!UpdateCheck.IsInstalled)
+                return false;
+
+            if (!Properties.Settings.Default.CheckVersionAtStartup)
                 return false;
 
             Log.Logger.Information("Checking for update");
 
             await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Checking for update..."));
 
-            var newVersion = await Program.UpdateManager.CheckForUpdatesAsync();
+            var newVersion = await UpdateCheck.UpdateManager.CheckForUpdatesAsync();
 
             if (newVersion == null)
                 return false;
@@ -54,13 +57,13 @@ internal class WindowSource : IWindowSource, IDisposable
 
             await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Downloading update..."));
 
-            await Program.UpdateManager.DownloadUpdatesAsync(newVersion);
+            await UpdateCheck.UpdateManager.DownloadUpdatesAsync(newVersion);
 
             Log.Logger.Information("Installing update");
 
             await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Installing update..."));
 
-            Program.UpdateManager.ApplyUpdatesAndRestart(newVersion);
+            UpdateCheck.UpdateManager.ApplyUpdatesAndRestart(newVersion);
         }
         catch (Exception e)
         {
@@ -158,6 +161,7 @@ internal class WindowSource : IWindowSource, IDisposable
         var categoryPanels = new List<CategoryPanelBase>
         {
             new GeneralSettingsPanel(),
+            new UpdateSettingsPanel(),
             new AboutSettingsPanel()
         };
 

@@ -13,7 +13,7 @@
         <StackPanel windows:Spacing.Vertical="10">
             <TextBlock Text="{x:Static properties:Resources.ApplicationName}"
                        FontWeight="Bold" />
-            <TextBlock Text="{Binding Source={x:Static worldClockStatusWindow:Program.LocalVersion}, StringFormat={x:Static properties:Resources.Version}}"
+            <TextBlock Text="{Binding Source={x:Static worldClockStatusWindow:UpdateCheck.LocalVersion}, StringFormat={x:Static properties:Resources.Version}}"
                        Name="VersionLabel" />
             <TextBlock Text="Chris Kaczor" />
         </StackPanel>

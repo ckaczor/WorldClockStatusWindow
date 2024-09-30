@@ -145,4 +145,26 @@
   <data name="Version" xml:space="preserve">
     <value>Version {0}</value>
   </data>
+  <data name="optionCategoryUpdate" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="checkVersionOnStartupCheckBox" xml:space="preserve">
+    <value>_Check for a new version on startup</value>
+  </data>
+  <data name="checkVersionNowButton" xml:space="preserve">
+    <value>Check _Now</value>
+  </data>
+  <data name="UpdateCheckTitle" xml:space="preserve">
+    <value>{0} Update</value>
+  </data>
+  <data name="UpdateCheckCurrent" xml:space="preserve">
+    <value>You are already running the most recent version.
+
+No updates are available at this time.</value>
+  </data>
+  <data name="UpdateCheckNewVersion" xml:space="preserve">
+    <value>Version {1} of {0} is now available.
+
+Would you like to download and install it now?</value>
+  </data>
 </root>

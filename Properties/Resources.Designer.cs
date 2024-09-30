@@ -89,6 +89,24 @@ namespace WorldClockStatusWindow.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check _Now.
+        /// </summary>
+        public static string checkVersionNowButton {
+            get {
+                return ResourceManager.GetString("checkVersionNowButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Check for a new version on startup.
+        /// </summary>
+        public static string checkVersionOnStartupCheckBox {
+            get {
+                return ResourceManager.GetString("checkVersionOnStartupCheckBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string CloseButtonText {
@@ -116,6 +134,15 @@ namespace WorldClockStatusWindow.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string optionCategoryUpdate {
+            get {
+                return ResourceManager.GetString("optionCategoryUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string SettingsTitle {
@@ -130,6 +157,37 @@ namespace WorldClockStatusWindow.Properties {
         public static string startWithWindowsCheckBox {
             get {
                 return ResourceManager.GetString("startWithWindowsCheckBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are already running the most recent version.
+        ///
+        ///No updates are available at this time..
+        /// </summary>
+        public static string UpdateCheckCurrent {
+            get {
+                return ResourceManager.GetString("UpdateCheckCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version {1} of {0} is now available.
+        ///
+        ///Would you like to download and install it now?.
+        /// </summary>
+        public static string UpdateCheckNewVersion {
+            get {
+                return ResourceManager.GetString("UpdateCheckNewVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Update.
+        /// </summary>
+        public static string UpdateCheckTitle {
+            get {
+                return ResourceManager.GetString("UpdateCheckTitle", resourceCulture);
             }
         }
         

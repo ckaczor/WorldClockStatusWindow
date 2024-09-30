@@ -70,5 +70,17 @@ namespace WorldClockStatusWindow.Properties {
                 this["TimeZones"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CheckVersionAtStartup {
+            get {
+                return ((bool)(this["CheckVersionAtStartup"]));
+            }
+            set {
+                this["CheckVersionAtStartup"] = value;
+            }
+        }
     }
 }
