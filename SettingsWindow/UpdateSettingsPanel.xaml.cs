@@ -19,7 +19,7 @@ public partial class UpdateSettingsPanel
 
         Cursor = Cursors.Wait;
 
-        UpdateCheck.DisplayUpdateInformation(true);
+        UpdateCheck.DisplayUpdateInformation(true).Wait();
 
         Cursor = cursor;
     }

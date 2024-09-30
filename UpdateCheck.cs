@@ -1,5 +1,6 @@
 ﻿using NuGet.Versioning;
 using Serilog;
+using System.Threading.Tasks;
 using System.Windows;
 using Velopack;
 using Velopack.Sources;
@@ -16,7 +17,7 @@ namespace WorldClockStatusWindow
 
         public static bool IsInstalled => UpdateManager.IsInstalled;
 
-        public static async void DisplayUpdateInformation(bool showIfCurrent)
+        public static async Task DisplayUpdateInformation(bool showIfCurrent)
         {
             UpdateInfo newVersion = null;
 
