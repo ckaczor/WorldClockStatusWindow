@@ -13,13 +13,13 @@ public partial class UpdateSettingsPanel
 
     public override string CategoryName => Properties.Resources.optionCategoryUpdate;
 
-    private void HandleCheckVersionNowButtonClick(object sender, RoutedEventArgs e)
+    private async void HandleCheckVersionNowButtonClick(object sender, RoutedEventArgs e)
     {
         var cursor = Cursor;
 
         Cursor = Cursors.Wait;
 
-        UpdateCheck.DisplayUpdateInformation(true).Wait();
+        await UpdateCheck.DisplayUpdateInformation(true);
 
         Cursor = cursor;
     }
