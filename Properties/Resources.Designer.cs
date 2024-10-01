@@ -80,6 +80,15 @@ namespace WorldClockStatusWindow.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checking for update....
+        /// </summary>
+        public static string CheckingForUpdate {
+            get {
+                return ResourceManager.GetString("CheckingForUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Check for Update.
         /// </summary>
         public static string CheckUpdate {
@@ -112,6 +121,33 @@ namespace WorldClockStatusWindow.Properties {
         public static string CloseButtonText {
             get {
                 return ResourceManager.GetString("CloseButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading update....
+        /// </summary>
+        public static string DownloadingUpdate {
+            get {
+                return ResourceManager.GetString("DownloadingUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installing update....
+        /// </summary>
+        public static string InstallingUpdate {
+            get {
+                return ResourceManager.GetString("InstallingUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading....
+        /// </summary>
+        public static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
             }
         }
         

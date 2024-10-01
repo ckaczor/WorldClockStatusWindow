@@ -5,57 +5,46 @@ using System.Windows;
 using Velopack;
 using Velopack.Sources;
 
-namespace WorldClockStatusWindow
+namespace WorldClockStatusWindow;
+
+internal static class UpdateCheck
 {
-    internal static class UpdateCheck
+    private static UpdateManager _updateManager;
+
+    public static UpdateManager UpdateManager => _updateManager ??= new UpdateManager(new GithubSource("https://github.com/ckaczor/WorldClockStatusWindow", null, false));
+
+    public static string LocalVersion => (UpdateManager.CurrentVersion ?? new SemanticVersion(0, 0, 0)).ToString();
+
+    public static bool IsInstalled => UpdateManager.IsInstalled;
+
+    public static async Task DisplayUpdateInformation(bool showIfCurrent)
     {
-        private static UpdateManager _updateManager;
+        var newVersion = IsInstalled ? await UpdateManager.CheckForUpdatesAsync() : null;
 
-        public static UpdateManager UpdateManager => _updateManager ??= new UpdateManager(new GithubSource("https://github.com/ckaczor/WorldClockStatusWindow", null, false));
-
-        public static string LocalVersion => (UpdateManager.CurrentVersion ?? new SemanticVersion(0, 0, 0)).ToString();
-
-        public static bool IsInstalled => UpdateManager.IsInstalled;
-
-        public static async Task DisplayUpdateInformation(bool showIfCurrent)
+        if (newVersion != null)
         {
-            UpdateInfo newVersion = null;
+            var updateCheckTitle = string.Format(Properties.Resources.UpdateCheckTitle, Properties.Resources.ApplicationName);
 
-            if (IsInstalled)
-            {
-                newVersion = await UpdateManager.CheckForUpdatesAsync();
-            }
+            var updateCheckMessage = string.Format(Properties.Resources.UpdateCheckNewVersion, newVersion.TargetFullRelease.Version);
 
-            if (newVersion != null)
-            {
-                // Format the check title
-                var updateCheckTitle = string.Format(Properties.Resources.UpdateCheckTitle, Properties.Resources.ApplicationName);
+            if (MessageBox.Show(updateCheckMessage, updateCheckTitle, MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+                return;
 
-                // Format the message
-                var updateCheckMessage = string.Format(Properties.Resources.UpdateCheckNewVersion, Properties.Resources.ApplicationName, newVersion.TargetFullRelease.Version);
+            Log.Logger.Information("Downloading update");
 
-                // Ask the user to update
-                if (MessageBox.Show(updateCheckMessage, updateCheckTitle, MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
-                    return;
+            await UpdateManager.DownloadUpdatesAsync(newVersion);
 
-                Log.Logger.Information("Downloading update");
+            Log.Logger.Information("Installing update");
 
-                await UpdateManager.DownloadUpdatesAsync(newVersion);
+            UpdateManager.ApplyUpdatesAndRestart(newVersion);
+        }
+        else if (showIfCurrent)
+        {
+            var updateCheckTitle = string.Format(Properties.Resources.UpdateCheckTitle, Properties.Resources.ApplicationName);
 
-                Log.Logger.Information("Installing update");
+            var updateCheckMessage = string.Format(Properties.Resources.UpdateCheckCurrent, Properties.Resources.ApplicationName);
 
-                UpdateManager.ApplyUpdatesAndRestart(newVersion);
-            }
-            else if (showIfCurrent)
-            {
-                // Format the check title
-                var updateCheckTitle = string.Format(Properties.Resources.UpdateCheckTitle, Properties.Resources.ApplicationName);
-
-                // Format the message
-                var updateCheckMessage = string.Format(Properties.Resources.UpdateCheckCurrent, Properties.Resources.ApplicationName);
-
-                MessageBox.Show(updateCheckMessage, updateCheckTitle, MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+            MessageBox.Show(updateCheckMessage, updateCheckTitle, MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

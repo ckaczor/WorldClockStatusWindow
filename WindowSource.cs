@@ -4,12 +4,12 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Threading;
+using WorldClockStatusWindow.Properties;
 using WorldClockStatusWindow.SettingsWindow;
 
 namespace WorldClockStatusWindow;
@@ -25,7 +25,7 @@ internal class WindowSource : IWindowSource, IDisposable
     internal WindowSource()
     {
         _floatingStatusWindow = new FloatingStatusWindow(this);
-        _floatingStatusWindow.SetText("Loading...");
+        _floatingStatusWindow.SetText(Resources.Loading);
 
         _dispatcher = Dispatcher.CurrentDispatcher;
 
@@ -41,12 +41,12 @@ internal class WindowSource : IWindowSource, IDisposable
             if (!UpdateCheck.IsInstalled)
                 return false;
 
-            if (!Properties.Settings.Default.CheckVersionAtStartup)
+            if (!Settings.Default.CheckVersionAtStartup)
                 return false;
 
             Log.Logger.Information("Checking for update");
 
-            await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Checking for update..."));
+            await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText(Resources.CheckingForUpdate));
 
             var newVersion = await UpdateCheck.UpdateManager.CheckForUpdatesAsync();
 
@@ -55,13 +55,13 @@ internal class WindowSource : IWindowSource, IDisposable
 
             Log.Logger.Information("Downloading update");
 
-            await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Downloading update..."));
+            await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText(Resources.DownloadingUpdate));
 
             await UpdateCheck.UpdateManager.DownloadUpdatesAsync(newVersion);
 
             Log.Logger.Information("Installing update");
 
-            await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText("Installing update..."));
+            await _dispatcher.InvokeAsync(() => _floatingStatusWindow.SetText(Resources.InstallingUpdate));
 
             UpdateCheck.UpdateManager.ApplyUpdatesAndRestart(newVersion);
         }
@@ -92,7 +92,7 @@ internal class WindowSource : IWindowSource, IDisposable
 
     private void Load()
     {
-        _timeZoneEntries = JsonSerializer.Deserialize<List<TimeZoneEntry>>(Properties.Settings.Default.TimeZones);
+        _timeZoneEntries = JsonSerializer.Deserialize<List<TimeZoneEntry>>(Settings.Default.TimeZones);
 
         if (_timeZoneEntries.Any())
             return;
@@ -107,8 +107,8 @@ internal class WindowSource : IWindowSource, IDisposable
 
     private void Save()
     {
-        Properties.Settings.Default.TimeZones = JsonSerializer.Serialize(_timeZoneEntries);
-        Properties.Settings.Default.Save();
+        Settings.Default.TimeZones = JsonSerializer.Serialize(_timeZoneEntries);
+        Settings.Default.Save();
     }
 
     private void HandleTimerElapsed(object sender, ElapsedEventArgs e)
@@ -126,7 +126,7 @@ internal class WindowSource : IWindowSource, IDisposable
             if (text.Length > 0)
                 text.AppendLine();
 
-            text.Append($"{timeZoneEntry.Label.PadLeft(labelLength)}: {TimeZoneInfo.ConvertTime(now, timeZone).ToString(Properties.Settings.Default.TimeFormat)}");
+            text.Append($"{timeZoneEntry.Label.PadLeft(labelLength)}: {TimeZoneInfo.ConvertTime(now, timeZone).ToString(Settings.Default.TimeFormat)}");
         }
 
         _dispatcher.Invoke(() => _floatingStatusWindow.SetText(text.ToString()));
@@ -143,9 +143,9 @@ internal class WindowSource : IWindowSource, IDisposable
 
     public Guid Id => Guid.Parse("29DF6CFD-6783-406F-AE12-4723EB7741EA");
 
-    public string Name => "World Clock";
+    public string Name => Resources.ApplicationName;
 
-    public System.Drawing.Icon Icon => Properties.Resources.ApplicationIcon;
+    public System.Drawing.Icon Icon => Resources.ApplicationIcon;
 
     public bool HasSettingsMenu => true;
 
@@ -153,7 +153,6 @@ internal class WindowSource : IWindowSource, IDisposable
 
     public void ShowAbout()
     {
-        _floatingStatusWindow.SetText(Assembly.GetEntryAssembly()!.GetName().Version!.ToString());
     }
 
     public void ShowSettings()
@@ -165,7 +164,7 @@ internal class WindowSource : IWindowSource, IDisposable
             new AboutSettingsPanel()
         };
 
-        var settingsWindow = new CategoryWindow(categoryPanels, Properties.Resources.SettingsTitle, Properties.Resources.CloseButtonText);
+        var settingsWindow = new CategoryWindow(categoryPanels, Resources.SettingsTitle, Resources.CloseButtonText);
 
         var dialogResult = settingsWindow.ShowDialog();
 
@@ -183,11 +182,11 @@ internal class WindowSource : IWindowSource, IDisposable
 
     public string WindowSettings
     {
-        get => Properties.Settings.Default.WindowSettings;
+        get => Settings.Default.WindowSettings;
         set
         {
-            Properties.Settings.Default.WindowSettings = value;
-            Properties.Settings.Default.Save();
+            Settings.Default.WindowSettings = value;
+            Settings.Default.Save();
         }
     }
 }
