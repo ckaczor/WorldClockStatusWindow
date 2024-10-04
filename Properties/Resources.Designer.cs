@@ -61,6 +61,24 @@ namespace WorldClockStatusWindow.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string AddTimeZoneLink {
+            get {
+                return ResourceManager.GetString("AddTimeZoneLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Time Zone.
+        /// </summary>
+        public static string AddTimeZoneToolTip {
+            get {
+                return ResourceManager.GetString("AddTimeZoneToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon ApplicationIcon {
@@ -76,6 +94,15 @@ namespace WorldClockStatusWindow.Properties {
         public static string ApplicationName {
             get {
                 return ResourceManager.GetString("ApplicationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string CancelButton {
+            get {
+                return ResourceManager.GetString("CancelButton", resourceCulture);
             }
         }
         
@@ -125,11 +152,65 @@ namespace WorldClockStatusWindow.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the selected time zones?.
+        /// </summary>
+        public static string ConfirmDeleteTimeZones {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteTimeZones", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm Delete.
+        /// </summary>
+        public static string ConfirmDeleteTitle {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string DeleteTimeZoneLink {
+            get {
+                return ResourceManager.GetString("DeleteTimeZoneLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Time Zone.
+        /// </summary>
+        public static string DeleteTimeZoneToolTip {
+            get {
+                return ResourceManager.GetString("DeleteTimeZoneToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Downloading update....
         /// </summary>
         public static string DownloadingUpdate {
             get {
                 return ResourceManager.GetString("DownloadingUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string EditTimeZoneLink {
+            get {
+                return ResourceManager.GetString("EditTimeZoneLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Time Zone.
+        /// </summary>
+        public static string EditTimeZoneToolTip {
+            get {
+                return ResourceManager.GetString("EditTimeZoneToolTip", resourceCulture);
             }
         }
         
@@ -143,11 +224,29 @@ namespace WorldClockStatusWindow.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Label.
+        /// </summary>
+        public static string LabelColumnHeader {
+            get {
+                return ResourceManager.GetString("LabelColumnHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading....
         /// </summary>
         public static string Loading {
             get {
                 return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string OkayButton {
+            get {
+                return ResourceManager.GetString("OkayButton", resourceCulture);
             }
         }
         
@@ -166,6 +265,15 @@ namespace WorldClockStatusWindow.Properties {
         public static string optionCategoryGeneral {
             get {
                 return ResourceManager.GetString("optionCategoryGeneral", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time Zones.
+        /// </summary>
+        public static string optionCategoryTimeZones {
+            get {
+                return ResourceManager.GetString("optionCategoryTimeZones", resourceCulture);
             }
         }
         
@@ -197,6 +305,33 @@ namespace WorldClockStatusWindow.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Time Zone.
+        /// </summary>
+        public static string TimeZoneColumnHeader {
+            get {
+                return ResourceManager.GetString("TimeZoneColumnHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Time Zone.
+        /// </summary>
+        public static string TimeZoneWindowAdd {
+            get {
+                return ResourceManager.GetString("TimeZoneWindowAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Time Zone.
+        /// </summary>
+        public static string TimeZoneWindowEdit {
+            get {
+                return ResourceManager.GetString("TimeZoneWindowEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are already running the most recent version.
         ///
         ///No updates are available at this time..
@@ -208,7 +343,7 @@ namespace WorldClockStatusWindow.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version {1} of {0} is now available.
+        ///   Looks up a localized string similar to Version {0} is now available.
         ///
         ///Would you like to download and install it now?.
         /// </summary>

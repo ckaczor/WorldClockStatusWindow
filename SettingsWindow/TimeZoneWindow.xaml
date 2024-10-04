@@ -1,0 +1,83 @@
+﻿<Window x:Class="WorldClockStatusWindow.SettingsWindow.TimeZoneWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:properties="clr-namespace:WorldClockStatusWindow.Properties"
+        xmlns:worldClockStatusWindow="clr-namespace:WorldClockStatusWindow"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        d:DataContext="{d:DesignInstance Type=worldClockStatusWindow:TimeZoneEntry}"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:windows="clr-namespace:ChrisKaczor.Wpf.Windows;assembly=ChrisKaczor.Wpf.Windows.CategoryWindow"
+        mc:Ignorable="d"
+        Title="TimeZoneWindow"
+        ResizeMode="NoResize"
+        SizeToContent="Height"
+        Width="450"
+        WindowStartupLocation="CenterOwner"
+        Icon="/WorldClockStatusWindow;component/Resources/Application.ico"
+        FocusManager.FocusedElement="{Binding ElementName=LabelTextBox}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.FlatButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/light.cobalt.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Margin="0,4"
+                    windows:Spacing.Vertical="8">
+            <TextBox Name="LabelTextBox"
+                     mah:TextBoxHelper.UseFloatingWatermark="True"
+                     mah:TextBoxHelper.Watermark="{x:Static properties:Resources.LabelColumnHeader}"
+                     mah:TextBoxHelper.SelectAllOnFocus="True"
+                     Text="{Binding Path=Label, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}" />
+            <ComboBox Name="TimeZoneComboBox"
+                      DisplayMemberPath="DisplayName"
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding Path=TimeZoneId}"
+                      VirtualizingPanel.IsVirtualizing="False"
+                      mah:TextBoxHelper.UseFloatingWatermark="True"
+                      mah:TextBoxHelper.Watermark="{x:Static properties:Resources.TimeZoneColumnHeader}" />
+        </StackPanel>
+        <StackPanel Grid.Column="0"
+                    Grid.Row="1"
+                    Orientation="Horizontal"
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Right">
+            <Button Content="{x:Static properties:Resources.OkayButton}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Width="75"
+                    Margin="0,0,5,0"
+                    IsDefault="True"
+                    Click="HandleOkayButtonClick">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text.Length, ElementName=LabelTextBox}"
+                                         Value="0">
+                                <Setter Property="IsEnabled"
+                                        Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Content="{x:Static properties:Resources.CancelButton}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Width="75"
+                    IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</Window>

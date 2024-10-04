@@ -1,0 +1,90 @@
+﻿<windows:CategoryPanelBase x:Class="WorldClockStatusWindow.SettingsWindow.TimeZonesSettingsPanel"
+                           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                           xmlns:properties="clr-namespace:WorldClockStatusWindow.Properties"
+                           xmlns:worldClockStatusWindow="clr-namespace:WorldClockStatusWindow"
+                           xmlns:windows="clr-namespace:ChrisKaczor.Wpf.Windows;assembly=ChrisKaczor.Wpf.Windows.CategoryWindow"
+                           xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Controls;assembly=ChrisKaczor.Wpf.Controls.Link"
+                           mc:Ignorable="d"
+                           d:DesignHeight="150"
+                           d:DesignWidth="300">
+    <windows:CategoryPanelBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.FlatButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/light.cobalt.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </windows:CategoryPanelBase.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <DataGrid Name="TimeZoneDataGrid"
+                  SelectionMode="Extended"
+                  Grid.Column="0"
+                  Grid.Row="0"
+                  AutoGenerateColumns="False"
+                  GridLinesVisibility="None"
+                  CanUserResizeRows="False"
+                  IsReadOnly="True"
+                  SelectionUnit="FullRow"
+                  HeadersVisibility="Column"
+                  BorderThickness="1,1,1,1"
+                  BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                  Background="{x:Null}"
+                  SelectionChanged="HandleTimeZoneDataGridSelectionChanged"
+                  d:DataContext="{d:DesignInstance worldClockStatusWindow:TimeZoneEntry }">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Label}"
+                                    Header="{x:Static properties:Resources.LabelColumnHeader}"
+                                    SortDirection="Ascending"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding TimeZoneId}"
+                                    Header="{x:Static properties:Resources.TimeZoneColumnHeader}"
+                                    Width="*" />
+            </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow"
+                       BasedOn="{StaticResource MahApps.Styles.DataGridRow}">
+                    <EventSetter Event="MouseDoubleClick"
+                                 Handler="HandleTimeZoneDataGridRowMouseDoubleClick" />
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+        <Border Grid.Column="0"
+                Grid.Row="1"
+                BorderThickness="1,0,1,1"
+                BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
+            <StackPanel Orientation="Horizontal"
+                        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                <controls:Link Name="AddTimeZoneButton"
+                               Margin="2"
+                               Click="HandleAddTimeZoneButtonClick"
+                               Text="{x:Static properties:Resources.AddTimeZoneLink}"
+                               ToolTip="{x:Static properties:Resources.AddTimeZoneToolTip}">
+                </controls:Link>
+                <controls:Link Name="EditTimeZoneButton"
+                               Margin="2"
+                               Click="HandleEditTimeZoneButtonClick"
+                               Text="{x:Static properties:Resources.EditTimeZoneLink}"
+                               ToolTip="{x:Static properties:Resources.EditTimeZoneToolTip}">
+                </controls:Link>
+                <controls:Link Name="DeleteTimeZoneButton"
+                               Margin="2"
+                               Click="HandleDeleteTimeZoneButtonClick"
+                               Text="{x:Static properties:Resources.DeleteTimeZoneLink}"
+                               ToolTip="{x:Static properties:Resources.DeleteTimeZoneToolTip}">
+                </controls:Link>
+            </StackPanel>
+        </Border>
+    </Grid>
+</windows:CategoryPanelBase>

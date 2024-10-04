@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Threading;
@@ -19,8 +18,6 @@ internal class WindowSource : IWindowSource, IDisposable
     private readonly FloatingStatusWindow _floatingStatusWindow;
     private readonly Timer _timer;
     private readonly Dispatcher _dispatcher;
-
-    private List<TimeZoneEntry> _timeZoneEntries;
 
     internal WindowSource()
     {
@@ -90,43 +87,35 @@ internal class WindowSource : IWindowSource, IDisposable
         _timer.Enabled = true;
     }
 
-    private void Load()
+    private static void Load()
     {
-        _timeZoneEntries = JsonSerializer.Deserialize<List<TimeZoneEntry>>(Settings.Default.TimeZones);
-
-        if (_timeZoneEntries.Any())
-            return;
-
-        _timeZoneEntries.Add(new TimeZoneEntry { Label = "UTC", TimeZoneId = "UTC" });
-        _timeZoneEntries.Add(new TimeZoneEntry { Label = "IST", TimeZoneId = "India Standard Time" });
-        _timeZoneEntries.Add(new TimeZoneEntry { Label = "CET", TimeZoneId = "Central Europe Standard Time" });
-        _timeZoneEntries.Add(new TimeZoneEntry { Label = "Local", TimeZoneId = string.Empty });
-
-        Save();
+        Data.Load();
     }
 
-    private void Save()
+    private static void Save()
     {
-        Settings.Default.TimeZones = JsonSerializer.Serialize(_timeZoneEntries);
-        Settings.Default.Save();
+        Data.Save();
     }
 
     private void HandleTimerElapsed(object sender, ElapsedEventArgs e)
     {
         var text = new StringBuilder();
 
-        var now = DateTimeOffset.Now;
-
-        var labelLength = _timeZoneEntries.Max(x => x.Label.Length);
-
-        foreach (var timeZoneEntry in _timeZoneEntries)
+        if (Data.TimeZoneEntries.Any())
         {
-            var timeZone = timeZoneEntry.TimeZoneId == string.Empty ? TimeZoneInfo.Local : TimeZoneInfo.FindSystemTimeZoneById(timeZoneEntry.TimeZoneId);
+            var now = DateTimeOffset.Now;
 
-            if (text.Length > 0)
-                text.AppendLine();
+            var labelLength = Data.TimeZoneEntries.Max(x => x.Label.Length);
 
-            text.Append($"{timeZoneEntry.Label.PadLeft(labelLength)}: {TimeZoneInfo.ConvertTime(now, timeZone).ToString(Settings.Default.TimeFormat)}");
+            foreach (var timeZoneEntry in Data.TimeZoneEntries)
+            {
+                var timeZone = timeZoneEntry.TimeZoneId == string.Empty ? TimeZoneInfo.Local : TimeZoneInfo.FindSystemTimeZoneById(timeZoneEntry.TimeZoneId);
+
+                if (text.Length > 0)
+                    text.AppendLine();
+
+                text.Append($"{timeZoneEntry.Label.PadLeft(labelLength)}: {TimeZoneInfo.ConvertTime(now, timeZone).ToString(Settings.Default.TimeFormat)}");
+            }
         }
 
         _dispatcher.Invoke(() => _floatingStatusWindow.SetText(text.ToString()));
@@ -160,6 +149,7 @@ internal class WindowSource : IWindowSource, IDisposable
         var categoryPanels = new List<CategoryPanelBase>
         {
             new GeneralSettingsPanel(),
+            new TimeZonesSettingsPanel(),
             new UpdateSettingsPanel(),
             new AboutSettingsPanel()
         };
