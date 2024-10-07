@@ -35,6 +35,9 @@ public class TimeZoneEntry : INotifyDataErrorInfo
     [JsonIgnore]
     public bool HasErrors => _dataErrorDictionary.Any();
 
+    [JsonIgnore]
+    public TimeZoneInfo TimeZoneInfo => TimeZoneInfo.FindSystemTimeZoneById(TimeZoneId);
+
     public IEnumerable GetErrors(string propertyName)
     {
         return _dataErrorDictionary.GetErrors(propertyName);

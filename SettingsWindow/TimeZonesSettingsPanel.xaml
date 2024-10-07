@@ -7,6 +7,7 @@
                            xmlns:worldClockStatusWindow="clr-namespace:WorldClockStatusWindow"
                            xmlns:windows="clr-namespace:ChrisKaczor.Wpf.Windows;assembly=ChrisKaczor.Wpf.Windows.CategoryWindow"
                            xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Controls;assembly=ChrisKaczor.Wpf.Controls.Link"
+                           xmlns:dd="urn:gong-wpf-dragdrop"
                            mc:Ignorable="d"
                            d:DesignHeight="150"
                            d:DesignWidth="300">
@@ -36,21 +37,37 @@
                   GridLinesVisibility="None"
                   CanUserResizeRows="False"
                   IsReadOnly="True"
+                  CanUserSortColumns="False"
                   SelectionUnit="FullRow"
                   HeadersVisibility="Column"
                   BorderThickness="1,1,1,1"
                   BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                   Background="{x:Null}"
                   SelectionChanged="HandleTimeZoneDataGridSelectionChanged"
-                  d:DataContext="{d:DesignInstance worldClockStatusWindow:TimeZoneEntry }">
+                  d:DataContext="{d:DesignInstance worldClockStatusWindow:TimeZoneEntry }"
+                  dd:DragDrop.IsDragSource="True"
+                  dd:DragDrop.IsDropTarget="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Label}"
                                     Header="{x:Static properties:Resources.LabelColumnHeader}"
-                                    SortDirection="Ascending"
                                     Width="*" />
-                <DataGridTextColumn Binding="{Binding TimeZoneId}"
-                                    Header="{x:Static properties:Resources.TimeZoneColumnHeader}"
-                                    Width="*" />
+                <DataGridTemplateColumn Header="{x:Static properties:Resources.TimeZoneColumnHeader}"
+                                        Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Path=TimeZoneInfo.DisplayName}"
+                                           Height="Auto"
+                                           VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Path=TimeZoneInfo.Id}"
+                                           Height="Auto"
+                                           FontSize="11"
+                                           VerticalAlignment="Center"
+                                           Margin="0,2,0,2" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow"

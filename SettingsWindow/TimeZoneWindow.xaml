@@ -8,6 +8,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:windows="clr-namespace:ChrisKaczor.Wpf.Windows;assembly=ChrisKaczor.Wpf.Windows.CategoryWindow"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         Title="TimeZoneWindow"
         ResizeMode="NoResize"
@@ -42,12 +43,26 @@
                      mah:TextBoxHelper.SelectAllOnFocus="True"
                      Text="{Binding Path=Label, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}" />
             <ComboBox Name="TimeZoneComboBox"
-                      DisplayMemberPath="DisplayName"
                       SelectedValuePath="Id"
                       SelectedValue="{Binding Path=TimeZoneId}"
                       VirtualizingPanel.IsVirtualizing="False"
                       mah:TextBoxHelper.UseFloatingWatermark="True"
-                      mah:TextBoxHelper.Watermark="{x:Static properties:Resources.TimeZoneColumnHeader}" />
+                      mah:TextBoxHelper.Watermark="{x:Static properties:Resources.TimeZoneColumnHeader}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="system:TimeZoneInfo">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=DisplayName}"
+                                       Height="Auto"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding Path=Id}"
+                                       Height="Auto"
+                                       FontSize="11"
+                                       VerticalAlignment="Center"
+                                       Margin="0,2,0,2" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </StackPanel>
         <StackPanel Grid.Column="0"
                     Grid.Row="1"
@@ -62,7 +77,8 @@
                     IsDefault="True"
                     Click="HandleOkayButtonClick">
                 <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Style TargetType="Button"
+                           BasedOn="{StaticResource {x:Type Button}}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Text.Length, ElementName=LabelTextBox}"
                                          Value="0">

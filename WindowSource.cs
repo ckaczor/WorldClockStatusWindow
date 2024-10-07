@@ -156,10 +156,7 @@ internal class WindowSource : IWindowSource, IDisposable
 
         var settingsWindow = new CategoryWindow(categoryPanels, Resources.SettingsTitle, Resources.CloseButtonText);
 
-        var dialogResult = settingsWindow.ShowDialog();
-
-        if (!dialogResult.GetValueOrDefault(false))
-            return;
+        settingsWindow.ShowDialog();
 
         Save();
     }

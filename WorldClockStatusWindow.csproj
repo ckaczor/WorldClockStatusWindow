@@ -20,6 +20,7 @@
 		<PackageReference Include="ChrisKaczor.Wpf.Validation" Version="1.0.4" />
 		<PackageReference Include="ChrisKaczor.Wpf.Windows.CategoryWindow" Version="1.0.2" />
 		<PackageReference Include="ChrisKaczor.Wpf.Windows.FloatingStatusWindow" Version="2.0.0.5" />
+		<PackageReference Include="gong-wpf-dragdrop" Version="3.2.1" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Serilog" Version="4.0.2" />
 		<PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />

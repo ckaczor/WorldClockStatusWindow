@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -25,7 +24,6 @@ public partial class TimeZonesSettingsPanel
         if (_collectionViewSource == null)
         {
             _collectionViewSource = new CollectionViewSource { Source = Data.TimeZoneEntries };
-            _collectionViewSource.SortDescriptions.Add(new SortDescription("Label", ListSortDirection.Ascending));
 
             TimeZoneDataGrid.ItemsSource = _collectionViewSource.View;
         }
