@@ -16,17 +16,15 @@ public class TimeZoneEntry : INotifyDataErrorInfo
         _dataErrorDictionary.ErrorsChanged += DataErrorDictionaryErrorsChanged;
     }
 
-    private string _label;
-
     public string Label
     {
-        get => _label;
+        get;
         set
         {
             if (!ValidateLabel(value))
                 return;
 
-            _label = value;
+            field = value;
         }
     }
 

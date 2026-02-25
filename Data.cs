@@ -6,7 +6,7 @@ namespace WorldClockStatusWindow;
 
 internal static class Data
 {
-    internal static ObservableCollection<TimeZoneEntry> TimeZoneEntries { get; set; }
+    internal static ObservableCollection<TimeZoneEntry> TimeZoneEntries { get; private set; }
 
     internal static void Load()
     {
